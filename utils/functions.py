@@ -208,3 +208,13 @@ def function_total_line(df, column_value, column_total):
 
 
     return df
+
+def funtion_calculate_percentage(new_value, old_value):
+    percentage_difference = ((new_value - old_value) / old_value) * 100
+    if percentage_difference < 0:
+        percentage_color = 'red' 
+        arrow = '▼'
+    else:
+        percentage_color = 'green'  
+        arrow = '▲'
+    return percentage_difference, percentage_color, arrow

@@ -1,5 +1,6 @@
 import streamlit as st
 from menu.cost_management import CostManagement
+from menu.general_results import GeneralResults
 from menu.management_billing import ManegementBilling
 from utils.components import *
 from utils.user import logout
@@ -27,13 +28,17 @@ def render():
     
     data = initialize_data(user_id)
     # data = get_data(data) 
-    tab1, tab2 = st.tabs(["Faturamento Staff Gerencial", "Gerenciamento de Custos"])
-
+    tab1, tab2, tab3 = st.tabs(["Resultados Gerais","Faturamento Staff Gerencial", "Gerenciamento de Custos"])
+    
     with tab1:
+        page = GeneralResults()
+        page.render()
+
+    with tab2:
         page = ManegementBilling()
         page.render()
     
-    with tab2:
+    with tab3:
         page = CostManagement()
         page.render()
 

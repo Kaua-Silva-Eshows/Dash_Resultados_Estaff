@@ -9,7 +9,7 @@ from utils.components import *
 from utils.functions import *
 from datetime import date, datetime
 
-def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, ratingsRankDetails, generalCostsBlueme, costsBluemeDetails, ratingsRankBlueme):#, ratingsRankDetailsBlueme):
+def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, ratingsRankDetails, generalCostsBlueme, costsBluemeDetails, ratingsRankBlueme, ratingsRankDetailsBlueme):
 
     row1 = st.columns(6)
     global day_CostManagement1, day_CostManagement2
@@ -163,7 +163,7 @@ class CostManagement():
         self.data['generalCostsBlueme'] = general_costs_blueme(day_CostManagement1, day_CostManagement2)
         self.data['costsBluemeDetails'] = costs_blueme_details(day_CostManagement1, day_CostManagement2)
         self.data['ratingsRankBlueme'] = ratings_rank_blueme(data_ratingsRank)
-        #self.data['ratingsRankDetailsBlueme'] = ratings_rank_details_blueme(data_ratingsRank)
+        self.data['ratingsRankDetailsBlueme'] = ratings_rank_details_blueme(data_ratingsRank)
  
         BuildCostManagement(self.data['generalRevenue'],
                             self.data['generalCosts'],
@@ -172,5 +172,5 @@ class CostManagement():
                             self.data['ratingsRankDetails'],
                             self.data['generalCostsBlueme'],
                             self.data['costsBluemeDetails'],
-                            self.data['ratingsRankBlueme'])
-                            #self.data['ratingsRankDetailsBlueme'])
+                            self.data['ratingsRankBlueme'],
+                            self.data['ratingsRankDetailsBlueme'])

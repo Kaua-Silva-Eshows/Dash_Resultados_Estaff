@@ -26,7 +26,7 @@ def BuildManegementBilling(generalRevenue, estabelecimentoTransaction, groupsCom
 
     with row2[1]:
         estabelecimentoTransaction = estabelecimento_transaction(day_ManegementBilling1, day_ManegementBilling2)
-        filtered_copy, count = component_plotDataframe(estabelecimentoTransaction, "Faturamento Estabelecimento")
+        filtered_copy, count = component_plotDataframe(estabelecimentoTransaction, "Transações Por Estabelecimento")
         function_copy_dataframe_as_tsv(filtered_copy)
 
     col1, col2 = st.columns(2)

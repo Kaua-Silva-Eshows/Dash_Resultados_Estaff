@@ -39,7 +39,7 @@ def component_effect_underline():
     </style>
     """, unsafe_allow_html=True)
 
-def component_plotDataframe(df, name):
+def component_plotDataframe(df, name, height=400):
     st.markdown(f"<h5 style='text-align: center; background-color: #ffb131; padding: 0.1em;'>{name}</h5>", unsafe_allow_html=True)
 
     # Palavras-chave para procurar colunas que contenham links
@@ -85,7 +85,8 @@ def component_plotDataframe(df, name):
         update_mode=GridUpdateMode.MODEL_CHANGED,
         fit_columns_on_grid_load=True,  # Ajusta as colunas automaticamente ao carregar
         key=f"aggrid_{name}",
-        theme=custom_theme
+        theme=custom_theme,
+        height=height
     )
 
     # Recupera o DataFrame filtrado

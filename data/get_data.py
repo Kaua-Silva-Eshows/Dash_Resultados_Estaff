@@ -17,8 +17,9 @@ def initialize_data(id):
         "costsBluemeDetails" : pd.DataFrame(),
         "ratingsRankBlueme" : pd.DataFrame(),
         "ratingsRankDetailsBlueme" : pd.DataFrame(),
+        "billingCompanies" : pd.DataFrame(),
+        "worksByFunctions" : pd.DataFrame(),
         "id": id,
-
     }
 
     return data
