@@ -29,7 +29,6 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
     merged_df = function_grand_total_line(merged_df)
     merged_df = function_formated_cost(generalCosts, merged_df)
 
-    
     # Chamada da função com opções personalizadas
     filtered_copy, count = component_plotDataframe(merged_df, "Custos Gerais")
 
@@ -40,6 +39,7 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
 
     pivot_costDetails = function_marged_pivot_costDetails(costDetails, costsBluemeDetails)
 
+    pivot_costDetails = function_format_numeric_columns(pivot_costDetails, pivot_costDetails.columns[2:].tolist())
     filtered_copy, count= component_plotDataframe(pivot_costDetails, "Custos Especificos")
     function_copy_dataframe_as_tsv(filtered_copy)
 
@@ -71,7 +71,7 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
                 component_plotPizzaChart(merged_df1["CLASSIFICAÇÃO PRIMÁRIA"], merged_df1["VALOR"], None)
 
                 merged_df1 = function_total_line(merged_df1, 'VALOR', 'CLASSIFICAÇÃO PRIMÁRIA') 
-
+                merged_df1 = function_format_numeric_columns(merged_df1, ['VALOR'])
                 filtered_copy, count= component_plotDataframe(merged_df1, f"Custos {data_ratingsRank}")
 
                 function_copy_dataframe_as_tsv(filtered_copy)
@@ -88,7 +88,7 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
 
                 merged_df2 = function_total_line(merged_df2, 'VALOR', 'CLASSIFICAÇÃO PRIMÁRIA')
 
-
+                merged_df2 = function_format_numeric_columns(merged_df2, ['VALOR'])
                 filtered_copy, count= component_plotDataframe(merged_df2, f"Custos {data_ratingsRank2}")
                 function_copy_dataframe_as_tsv(filtered_copy)
 

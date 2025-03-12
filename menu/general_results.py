@@ -97,21 +97,26 @@ def BuildGeneralResults(billingCompanies, worksByFunctions, generalRevenueEvents
         tile.write(f"<p style='text-align: center; font-size: 12px;'>Fat. Estaff</br><span style='font-size: 18px;'>{sum_estaff_value:,.2f}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
 
         billingCompanies = billingCompanies.drop(columns=['VALOR LIQUIDO', 'VALOR EXTRA', 'VALOR FREELA', 'VALOR BRUTO'])
+        billingCompanies = function_format_numeric_columns(billingCompanies, ['VALOR TRANSACIONADO', 'TAXA ESTAFF'])
         filtered_copy, count = component_plotDataframe(billingCompanies, "Faturamento Por Estabelecimento")
         function_copy_dataframe_as_tsv(filtered_copy)
 
     with row2[1]:
+        worksByFunctions = function_format_numeric_columns(worksByFunctions, ['VALOR MÉDIO POR HORA'])
         filtered_copy, count = component_plotDataframe(worksByFunctions, "Trabalhos Por Funções",height=631)
         function_copy_dataframe_as_tsv(filtered_copy)
     
     with st.expander("📊 Abertura por Evento Geral", expanded=False):
         generalRevenueEvents = general_revenue_events(day_GeneralResults1, day_GeneralResults2, filters='')
+        generalRevenueEvents = function_format_numeric_columns(generalRevenueEvents, ['VALOR BRUTO', 'VALOR LIQUIDO', 'CUSTO EXTRA', 'TAXA EVENTO'])
         filtered_copy, count = component_plotDataframe(generalRevenueEvents, "Abertura Geral por Evento")
         function_copy_dataframe_as_tsv(filtered_copy)
         #function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas')
 
     with st.expander("📊 Abertura por Brigada Geral", expanded=False):
         generalRevenueBrigada = general_revenue_brigada(day_GeneralResults1, day_GeneralResults2, filters='')
+        generalRevenueBrigada = function_format_numeric_columns(generalRevenueBrigada, ['VALOR CONTRATO', 'PARCELA 1', 'PARCELA 2', 'PARCELA 3', 'PARCELA 4', 'PARCELA 5'])
+    
         filtered_copy, count = component_plotDataframe(generalRevenueBrigada, "Abertura Geral por Brigada")
         function_copy_dataframe_as_tsv(filtered_copy)
         #function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas')
