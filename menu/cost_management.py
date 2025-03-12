@@ -104,7 +104,7 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
                 with st.expander("Classificação Detalhada"):                    
                     
                     merged_df3 = function_total_line(merged_df3, 'VALOR', 'GRUPO GERAL')
-                    first_coluns = ['ID CUSTO', 'GRUPO GERAL', 'NIVEL 1', 'NIVEL 2']  
+                    first_coluns = ['ID CUSTO', 'GRUPO GERAL', 'NIVEL 1', 'NIVEL 2','FORNECEDOR']  
                     rest_columns = [col for col in merged_df3.columns if col not in first_coluns]
                     merged_df3 = merged_df3[first_coluns + rest_columns]
 
@@ -131,7 +131,7 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
 
                     merged_df4 = function_total_line(merged_df4, 'VALOR', 'GRUPO GERAL')
 
-                    first_coluns = ['ID CUSTO', 'GRUPO GERAL', 'NIVEL 1', 'NIVEL 2']  
+                    first_coluns = ['ID CUSTO', 'GRUPO GERAL', 'NIVEL 1', 'NIVEL 2', 'FORNECEDOR']  
                     rest_columns = [col for col in merged_df4.columns if col not in first_coluns]
                     merged_df4 = merged_df4[first_coluns + rest_columns]
 

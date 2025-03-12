@@ -48,7 +48,7 @@ def main():
 
 def show_login_page():
     col1, col2 = st.columns([4,2])
-    col1.write("## DashBoard Resultados Staff")
+    col1.write("## DashBoard Resultados Estaff")
     col2.image("./assets/imgs/staff.png", width=200)
     userName = st.text_input(label="", value="", placeholder="login")
     userPassword = st.text_input(label="", value="", placeholder="Senha",type="password")

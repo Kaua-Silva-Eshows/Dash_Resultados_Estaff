@@ -28,7 +28,7 @@ def render():
     
     data = initialize_data(user_id)
     # data = get_data(data) 
-    tab1, tab2, tab3 = st.tabs(["Resultados Gerais","Faturamento Staff Gerencial", "Gerenciamento de Custos"])
+    tab1, tab2, tab3 = st.tabs(["Resultados Gerais","Faturamento Estaff Gerencial", "Gerenciamento de Custos"])
     
     with tab1:
         page = GeneralResults()

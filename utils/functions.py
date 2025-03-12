@@ -118,15 +118,17 @@ def function_total_rows(df, category):
 
     return df
 
-def function_format_numeric_columns(df):
-    for column in df.columns:
-        try:
-            df[column] = pd.to_numeric(df[column])
-            df[column] = df[column].apply(
-                lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".") if isinstance(x, (int, float)) else x
-            )
-        except Exception:
-            continue
+def function_format_numeric_columns(df, columns=[]):
+    for column in columns:
+        if column in df.columns:  
+            try:
+                df[column] = pd.to_numeric(df[column])  
+                df[column] = df[column].apply(
+                    lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".") 
+                    if isinstance(x, (int, float)) else x
+                )
+            except Exception:
+                continue 
     return df
 
 def function_marged_pivot_costDetails(df1, df2):
