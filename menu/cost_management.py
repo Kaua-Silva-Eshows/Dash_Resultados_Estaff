@@ -100,7 +100,9 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
                 ratingsRankDetails = ratings_rank_details(data_ratingsRank)
                 ratingsRankDetailsBlueme = ratings_rank_details_blueme(data_ratingsRank)
                 merged_df3 = pd.concat([ratingsRankDetails, ratingsRankDetailsBlueme], ignore_index=True)
-        
+                merged_df3 = merged_df3.assign(order_category=merged_df3["NIVEL 1"].map(merged_df3.groupby("NIVEL 1")["VALOR"].sum().rank(method="first", ascending=False))).sort_values(by=["order_category", "VALOR"], ascending=[True, False]).drop(columns=["order_category"]).reset_index(drop=True)
+
+
                 with st.expander("Classificação Detalhada"):                    
                     
                     merged_df3 = function_total_line(merged_df3, 'VALOR', 'GRUPO GERAL')
@@ -124,6 +126,7 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
                 ratingsRankDetails2 = ratings_rank_details(data_ratingsRank2)
                 ratingsRankDetailsBlueme2 = ratings_rank_details_blueme(data_ratingsRank2)
                 merged_df4 = pd.concat([ratingsRankDetails2, ratingsRankDetailsBlueme2], ignore_index=True)
+                merged_df4 = merged_df4.assign(order_category=merged_df4["NIVEL 1"].map(merged_df4.groupby("NIVEL 1")["VALOR"].sum().rank(method="first", ascending=False))).sort_values(by=["order_category", "VALOR"], ascending=[True, False]).drop(columns=["order_category"]).reset_index(drop=True)
 
                 with st.expander("Classificação Detalhada"):
 
