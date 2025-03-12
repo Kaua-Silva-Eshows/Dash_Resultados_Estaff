@@ -109,14 +109,12 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
                     merged_df3 = merged_df3[first_coluns + rest_columns]
 
                     merged_df3["FORNECEDOR"] = merged_df3["FORNECEDOR"].replace("nan", "", regex=False)
-                    merged_df3["NIVEL 2"] = merged_df3["NIVEL 2"].replace("nan", "", regex=False)
-                    merged_df3['ID CUSTO'] = (merged_df3['ID CUSTO'].str.replace(",00", "", regex=False).str.replace("nan", "", regex=False).str.replace(".", "", regex=False))
-                    
+                    merged_df3["NIVEL 2"] = merged_df3["NIVEL 2"].replace("nan", "", regex=False)                    
                     row1 = st.columns(3)
                     tile = row1[1].container(border=True)
                     ratingsRankDetails_pay_pending = len(merged_df3[merged_df3['PAGAMENTO'] == 'Pendente'])
                     tile.write(f"<p style='text-align: center;'> Pagamentos Pendentes </br>{ ratingsRankDetails_pay_pending }</p>", unsafe_allow_html=True)
-                    
+                    merged_df3 = function_format_numeric_columns(merged_df3, ['VALOR'])
                     filtered_copy, count= component_plotDataframe(merged_df3, f"Classificação Detalhada {data_ratingsRank}")
                     function_copy_dataframe_as_tsv(filtered_copy)
                     #function_box_lenDf(len_df=count, df=filtered_copy, y='-130', x='300', box_id='box1', item='Insumos')
@@ -138,13 +136,11 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
 
                     merged_df4["FORNECEDOR"] = merged_df4["FORNECEDOR"].replace("nan", "", regex=False)
                     merged_df4["NIVEL 2"] = merged_df4["NIVEL 2"].replace("nan", "", regex=False)
-                    merged_df4['ID CUSTO'] = (merged_df4['ID CUSTO'].str.replace(",00", "", regex=False).str.replace("nan", "", regex=False).str.replace(".", "", regex=False))
-
-
                     row1 = st.columns(3)
                     tile = row1[1].container(border=True)
                     ratingsRankDetails2_pay_pending = len(merged_df4[merged_df4['PAGAMENTO'] == 'Pendente'])
                     tile.write(f"<p style='text-align: center;'> Pagamentos Pendentes </br>{ ratingsRankDetails2_pay_pending }</p>", unsafe_allow_html=True)
+                    merged_df4 = function_format_numeric_columns(merged_df4, ['VALOR'])
                     filtered_copy, count= component_plotDataframe(merged_df4, f"Classificação Detalhada {data_ratingsRank2}")
                     function_copy_dataframe_as_tsv(filtered_copy)
                     #function_box_lenDf(len_df=count, df=filtered_copy, y='-130', x='300', box_id='box1', item='Insumos')
