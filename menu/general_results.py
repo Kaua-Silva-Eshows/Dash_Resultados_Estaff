@@ -19,14 +19,19 @@ def BuildGeneralResults(billingCompanies, worksByFunctions, generalRevenueEvents
     with row1[3]:
         day_GeneralResults2 = st.date_input('Data Final:', value=date(datetime.today().year, datetime.today().month, 1) - relativedelta(days=1), format='DD/MM/YYYY', key='day_GeneralResults2')
 
-    day_GeneralResults3 = day_GeneralResults1 - relativedelta(months=1)
-    day_GeneralResults4 = day_GeneralResults2 - relativedelta(months=1)
+    num_months = (day_GeneralResults2.year - day_GeneralResults1.year) * 12 + (day_GeneralResults2.month - day_GeneralResults1.month) + 1
 
+    day_GeneralResults3 = day_GeneralResults1 - relativedelta(months=num_months)
+    day_GeneralResults4 = day_GeneralResults2 - relativedelta(months=num_months)
 
-    row2 = st.columns([2,1.5])
+    last_day_of_the_month = (day_GeneralResults2.replace(day=1) + relativedelta(months=1, days=-1)).day
+    if day_GeneralResults2.day == last_day_of_the_month:
+        day_GeneralResults4 = (day_GeneralResults4.replace(day=1) + relativedelta(months=1, days=-1))
+
+    row2 = st.columns([2, 1.5])
     billingCompanies = billing_companies(day_GeneralResults1, day_GeneralResults2)
     worksByFunctions = works_by_functions(day_GeneralResults1, day_GeneralResults2)
-    
+
     billingCompanies2 = billing_companies(day_GeneralResults3, day_GeneralResults4)
     worksByFunctions2 = works_by_functions(day_GeneralResults3, day_GeneralResults4)
 
@@ -103,6 +108,7 @@ def BuildGeneralResults(billingCompanies, worksByFunctions, generalRevenueEvents
 
     with row2[1]:
         worksByFunctions = function_format_numeric_columns(worksByFunctions, ['VALOR MÉDIO POR HORA'])
+        worksByFunctions["JORNADA MEDIA (HORAS)"] = worksByFunctions["JORNADA MEDIA (HORAS)"].map(lambda x: f"{x:.2f}".replace(".", ","))
         filtered_copy, count = component_plotDataframe(worksByFunctions, "Trabalhos Por Funções",height=631)
         function_copy_dataframe_as_tsv(filtered_copy)
     
