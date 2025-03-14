@@ -10,8 +10,8 @@ SELECT
     SUM(CASE WHEN G1.ID IN ('216') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C1 Impostos',
     SUM(CASE WHEN G1.ID IN ('220','221','222','225','232', '218', '226') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C2 Custos de Ocupação',
     SUM(CASE WHEN G1.ID IN ('223','231') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C3 Despesas com Pessoal Interno',
-    SUM(CASE WHEN G1.ID IN ('230', '210', '215') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C4 Despesas com Pessoal Terceirizado',
-    SUM(CASE WHEN G1.ID IN ('234') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C5 Despesas Operacionais com Freelas',
+    SUM(CASE WHEN G1.ID IN ('230', '210') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C4 Despesas com Pessoal Terceirizado',
+    SUM(CASE WHEN G1.ID IN ('234', '215') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C5 Despesas Operacionais com Freelas',
     SUM(CASE WHEN G1.ID IN ('233') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C6 Despesas com Clientes',
     SUM(CASE WHEN G1.ID IN ('217') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C7 Despesas com Softwares e Licenças',
     SUM(CASE WHEN G1.ID IN ('211', '224', '227') THEN DR.VALOR_LIQUIDO ELSE 0 END) AS 'C8 Despesas com Marketing',
@@ -35,8 +35,8 @@ SELECT
         WHEN G1.ID IN ('216') THEN 'c1_Impostos'
         WHEN G1.ID IN ('220','221','222','225','232', '218', '226') THEN 'c2_Custos_de_Ocupacao'
         WHEN G1.ID IN ('223','231') THEN 'c3_Despesas_com_Pessoal_Interno'
-        WHEN G1.ID IN ('230', '210', '215') THEN 'c4_Despesas_com_Pessoal_Terceirizado'
-        WHEN G1.ID IN ('234') THEN 'c5_Despesas_Operacionais_com_Freelas'
+        WHEN G1.ID IN ('230', '210') THEN 'c4_Despesas_com_Pessoal_Terceirizado'
+        WHEN G1.ID IN ('234', '215') THEN 'c5_Despesas_Operacionais_com_Freelas'
         WHEN G1.ID IN ('233') THEN 'c6_Despesas_com_Clientes'
         WHEN G1.ID IN ('217') THEN 'c7_Despesas_com_Softwares_e_Licencas'
         WHEN G1.ID IN ('211', '224', '227') THEN 'c8_Despesas_com_Marketing'
@@ -83,8 +83,8 @@ SELECT
         WHEN G1.ID IN ('216') THEN 'c1_Impostos'
         WHEN G1.ID IN ('220','221','222','225','232', '218', '226') THEN 'c2_Custos_de_Ocupacao'
         WHEN G1.ID IN ('223','231') THEN 'c3_Despesas_com_Pessoal_Interno'
-        WHEN G1.ID IN ('230', '210', '215') THEN 'c4_Despesas_com_Pessoal_Terceirizado'
-        WHEN G1.ID IN ('234') THEN 'c5_Despesas_Operacionais_com_Freelas'
+        WHEN G1.ID IN ('230', '210') THEN 'c4_Despesas_com_Pessoal_Terceirizado'
+        WHEN G1.ID IN ('234', '215') THEN 'c5_Despesas_Operacionais_com_Freelas'
         WHEN G1.ID IN ('233') THEN 'c6_Despesas_com_Clientes'
         WHEN G1.ID IN ('217') THEN 'c7_Despesas_com_Softwares_e_Licencas'
         WHEN G1.ID IN ('211', '224', '227') THEN 'c8_Despesas_com_Marketing'

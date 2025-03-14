@@ -54,7 +54,6 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
     with row2[4]:
         data_ratingsRank2 = st.date_input('Escolha Mês e Ano:', value=date((datetime.today() - relativedelta(months=1)).year, (datetime.today() - relativedelta(months=1)).month, 1), format='DD/MM/YYYY', key='data_ratingsRank2')
         data_ratingsRank2 = data_ratingsRank2.strftime('%Y-%m')
-        st.write(data_ratingsRank2)
 
     if data_ratingsRank == data_ratingsRank2:
         st.warning("🚨 As datas não podem ser iguais! Selecione meses diferentes.")
