@@ -2,6 +2,7 @@ import streamlit as st
 from menu.cost_management import CostManagement
 from menu.general_results import GeneralResults
 from menu.management_billing import ManegementBilling
+from menu.page import Page
 from utils.components import *
 from utils.user import logout
 from data.get_data import *
@@ -32,15 +33,12 @@ def render():
     
     with tab1:
         page = GeneralResults()
-        page.render()
 
     with tab2:
         page = ManegementBilling()
-        page.render()
     
     with tab3:
         page = CostManagement()
-        page.render()
 
 if __name__ == "__main__":
     if 'jwt_token' not in st.session_state:

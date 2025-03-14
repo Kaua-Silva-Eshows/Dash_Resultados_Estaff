@@ -128,7 +128,7 @@ def BuildGeneralResults(billingCompanies, worksByFunctions, generalRevenueEvents
         #function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas')
 
 
-class GeneralResults():
+class GeneralResults(Page):
     def render(self):
         self.data = {}
         day_GeneralResults1 = date(datetime.today().year, datetime.today().month, 1) - relativedelta(months=1)

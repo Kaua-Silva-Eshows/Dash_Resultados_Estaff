@@ -20,7 +20,6 @@ def BuildManegementBilling(generalRevenue, groupsCompanies, generalRevenueOportu
 
     with row2[0]:
         generalRevenue = general_revenue(day_ManegementBilling1, day_ManegementBilling2, filters='')
-        #generalRevenue = function_formatted_generalrevenue(generalRevenue)
         generalRevenue = function_format_numeric_columns(generalRevenue, ['Valor Bruto B2B', 'Taxa B2B', 'Total Oportunidade', 'Total Extra', 'Valor Freela','Valor Transac. Eventos', 'Taxa Eventos', 'Taxa Brigada Fixa','Faturamento Total'])
         generalRevenue = generalRevenue.drop(['Total Oportunidade', 'Total Extra', 'Valor Freela'], axis=1)
         filtered_copy, count = component_plotDataframe(generalRevenue, "Faturamento Estaff Gerencial")
@@ -93,7 +92,7 @@ def BuildManegementBilling(generalRevenue, groupsCompanies, generalRevenueOportu
             function_copy_dataframe_as_tsv(filtered_copy)
             #function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas')
 
-class ManegementBilling():
+class ManegementBilling(Page):
     def render(self):
         self.data = {}
         day_ManegementBilling1 = datetime.today().date()

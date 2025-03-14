@@ -29,7 +29,6 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
     merged_df = function_grand_total_line(merged_df)
     merged_df = function_formated_cost(generalCosts, merged_df)
 
-    # Chamada da função com opções personalizadas
     filtered_copy, count = component_plotDataframe(merged_df, "Custos Gerais")
 
     function_copy_dataframe_as_tsv(filtered_copy)
@@ -55,6 +54,7 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
     with row2[4]:
         data_ratingsRank2 = st.date_input('Escolha Mês e Ano:', value=date((datetime.today() - relativedelta(months=1)).year, (datetime.today() - relativedelta(months=1)).month, 1), format='DD/MM/YYYY', key='data_ratingsRank2')
         data_ratingsRank2 = data_ratingsRank2.strftime('%Y-%m')
+        st.write(data_ratingsRank2)
 
     if data_ratingsRank == data_ratingsRank2:
         st.warning("🚨 As datas não podem ser iguais! Selecione meses diferentes.")
@@ -148,7 +148,7 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
                     function_copy_dataframe_as_tsv(filtered_copy)
                     #function_box_lenDf(len_df=count, df=filtered_copy, y='-130', x='300', box_id='box1', item='Insumos')
 
-class CostManagement():
+class CostManagement(Page):
     def render(self):
         self.data = {}
         day_CostManagement1 = date(datetime.today().year - 1, 1, 1)
