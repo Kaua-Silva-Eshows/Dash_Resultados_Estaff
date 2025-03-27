@@ -39,68 +39,36 @@ def BuildGeneralResults(billingCompanies, worksByFunctions, generalRevenueEvents
             
         row2_1 = st.columns(5)
         tile = row2_1[0].container(border=True)
-
-        sum_total_works = sum(billingCompanies['NÚM. DE TRABALHOS'])
-        sum_total_works2 = sum(billingCompanies2['NÚM. DE TRABALHOS'])
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(sum_total_works, sum_total_works2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Núm. Jobs</br><span style='font-size: 18px;'>{sum_total_works}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
+        function_callsigns_structure(billingCompanies, billingCompanies2, 'NÚM. DE TRABALHOS', tile, 'Núm. Jobs', type='sum')
 
         tile = row2_1[1].container(border=True)
-        sum_total_freelas = sum(billingCompanies['FREELAS DISTINTOS'])
-        sum_total_freelas2 = sum(billingCompanies2['FREELAS DISTINTOS'])
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(sum_total_freelas, sum_total_freelas2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Freelas Dist.</br><span style='font-size: 18px;'>{sum_total_freelas}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
+        function_callsigns_structure(billingCompanies, billingCompanies2, 'FREELAS DISTINTOS', tile, 'Freelas Dist.', type='sum')
+        
         tile = row2_1[2].container(border=True)
-        sum_total_functions = sum(billingCompanies['FUNÇÕES DISTINTAS'])
-        sum_total_functions2 = sum(billingCompanies2['FUNÇÕES DISTINTAS'])
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(sum_total_functions, sum_total_functions2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Funções Dist.</br><span style='font-size: 18px;'>{sum_total_functions}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
+        function_callsigns_structure(billingCompanies, billingCompanies2, 'FUNÇÕES DISTINTAS', tile, 'Funções Dist.', type='sum')
 
         tile = row2_1[3].container(border=True)
-        mean_value_for_hour = billingCompanies['VALOR LIQUIDO'].mean()
-        mean_value_for_hour2 = billingCompanies2['VALOR LIQUIDO'].mean()
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(mean_value_for_hour, mean_value_for_hour2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Valor Med./Jobs</br><span style='font-size: 18px;'>{mean_value_for_hour:.2f}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
+        function_callsigns_structure(billingCompanies, billingCompanies2, 'VALOR LIQUIDO', tile, 'Valor Med./Jobs', num=True, type='average')
 
         tile = row2_1[4].container(border=True)
-        mean_value_for_hour = worksByFunctions['VALOR MÉDIO POR HORA'].mean()
-        mean_value_for_hour2 = worksByFunctions2['VALOR MÉDIO POR HORA'].mean()
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(mean_value_for_hour, mean_value_for_hour2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Valor Med./Hora</br><span style='font-size: 18px;'>{mean_value_for_hour:.2f}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
+        function_callsigns_structure(worksByFunctions, worksByFunctions2, 'VALOR MÉDIO POR HORA', tile, 'Valor Med./Hora', num=True, type='average')
+        
         row2_2 = st.columns(5)
-
         tile = row2_2[0].container(border=True)
-        sum_value_proposal = sum(billingCompanies['VALOR LIQUIDO'])
-        sum_value_proposal2 = sum(billingCompanies2['VALOR LIQUIDO'])
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(sum_value_proposal, sum_value_proposal2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Valor Propostas</br><span style='font-size: 18px;'>{sum_value_proposal:,.1f}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
+        function_callsigns_structure(billingCompanies, billingCompanies2, 'VALOR LIQUIDO', tile, 'Valor Propostas', num=True, type='sum')
+        
         tile = row2_2[1].container(border=True)
-        sum_value_extra = sum(billingCompanies['VALOR EXTRA'])
-        sum_value_extra2 = sum(billingCompanies2['VALOR EXTRA'])
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(sum_value_extra, sum_value_extra2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Valor Extra</br><span style='font-size: 18px;'>{sum_value_extra:,.1f}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
+        function_callsigns_structure(billingCompanies, billingCompanies2, 'VALOR EXTRA', tile, 'Valor Extra', num=True, type='sum')
+        
         tile = row2_2[2].container(border=True)
-        sum_value_freelas = sum(billingCompanies['VALOR FREELA'])
-        sum_value_freelas2 = sum(billingCompanies2['VALOR FREELA'])
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(sum_value_freelas, sum_value_freelas2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Valor Freelas</br><span style='font-size: 18px;'>{sum_value_freelas:,.1f}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
+        function_callsigns_structure(billingCompanies, billingCompanies2, 'VALOR FREELA', tile, 'Valor Freelas', num=True, type='sum')
+        
         tile = row2_2[3].container(border=True)
-        sum_value_gross = sum(billingCompanies['VALOR BRUTO'])
-        sum_value_gross2 = sum(billingCompanies2['VALOR BRUTO'])
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(sum_value_gross, sum_value_gross2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Valor Bruto</br><span style='font-size: 18px;'>{sum_value_gross:,.1f}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
+        function_callsigns_structure(billingCompanies, billingCompanies2, 'VALOR BRUTO', tile, 'Valor Bruto', num=True, type='sum')
+        
         tile = row2_2[4].container(border=True)
-        sum_estaff_value = sum(billingCompanies['TAXA ESTAFF'])
-        sum_estaff_value2 = sum(billingCompanies2['TAXA ESTAFF'])
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(sum_estaff_value, sum_estaff_value2)
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Fat. Estaff</br><span style='font-size: 18px;'>{sum_estaff_value:,.2f}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
+        function_callsigns_structure(billingCompanies, billingCompanies2, 'TAXA ESTAFF', tile, 'Fat. Estaff', num=True, type='sum')
+        
         billingCompanies = billingCompanies.drop(columns=['VALOR LIQUIDO', 'VALOR EXTRA', 'VALOR FREELA', 'VALOR BRUTO'])
         billingCompanies = function_format_numeric_columns(billingCompanies, ['VALOR TRANSACIONADO', 'TAXA ESTAFF'])
         filtered_copy, count = component_plotDataframe(billingCompanies, "Faturamento Por Estabelecimento")

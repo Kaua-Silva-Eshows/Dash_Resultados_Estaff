@@ -1,5 +1,7 @@
 import pandas as pd
 import streamlit.components.v1 as components
+import streamlit as st
+
 
 def function_copy_dataframe_as_tsv(df):
     # Converte o DataFrame para uma string TSV
@@ -220,3 +222,19 @@ def funtion_calculate_percentage(new_value, old_value):
         percentage_color = 'green'  
         arrow = '▲'
     return percentage_difference, percentage_color, arrow
+
+def function_callsigns_structure(df, df2, colunm, tile, text, num=False, type=''):
+    if type == 'sum':
+        valuer1 = sum(df[f'{colunm}'])
+        valuer2 = sum(df2[f'{colunm}'])
+    if type == 'average':
+        valuer1 = df[f'{colunm}'].mean()
+        valuer2 = df2[f'{colunm}'].mean()
+
+    percentage_difference, percentage_color, arrow = funtion_calculate_percentage(valuer1, valuer2)
+    if num == True:
+        valuer1_formatted = f"{valuer1:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        tile.write(f"<p style='text-align: center; font-size: 12px;'>{text}</br><span style='font-size: 17px;'>{valuer1_formatted}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
+    else:
+        tile.write(f"<p style='text-align: center; font-size: 12px;'>{text}</br><span style='font-size: 17px;'>{valuer1}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
+ 
