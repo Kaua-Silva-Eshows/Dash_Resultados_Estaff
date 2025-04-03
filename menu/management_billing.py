@@ -49,9 +49,11 @@ def BuildManegementBilling(generalRevenue, groupsCompanies, generalRevenueOportu
             filters = f"AND (TCG.NOME IN ({selected_groups_str}) OR (TCG.NOME IS NULL))"
         else:
             filters = f"AND TCG.NOME IN ({selected_groups_str})"
-        
 
         with col2:
+            if "Outros" not in selected_groups:
+                groupsCompanies_filtered = groupsCompanies_filtered.dropna(subset=['GRUPO'])
+
             select_companies = st.multiselect("Selecione as casas:", groupsCompanies_filtered['ESTABELECIMENTO'].unique(), placeholder='Casas')
         
         if select_companies:
@@ -65,7 +67,6 @@ def BuildManegementBilling(generalRevenue, groupsCompanies, generalRevenueOportu
                 filters += f" AND TC.NAME IN ({select_companies_str})"
         
         generalRevenue = general_revenue(day_ManegementBilling1, day_ManegementBilling2, filters)
-        #generalRevenue = function_formatted_generalrevenue(generalRevenue)
         generalRevenue = function_format_numeric_columns(generalRevenue, ['Valor Bruto B2B', 'Taxa B2B', 'Total Oportunidade', 'Total Extra', 'Valor Freela','Valor Transac. Eventos', 'Taxa Eventos', 'Taxa Brigada Fixa','Faturamento Total'])
         filtered_copy, count = component_plotDataframe(generalRevenue, "Faturamento Detalhado")
         function_copy_dataframe_as_tsv(filtered_copy)
@@ -76,21 +77,18 @@ def BuildManegementBilling(generalRevenue, groupsCompanies, generalRevenueOportu
             generalRevenueOportunity = function_format_numeric_columns(generalRevenueOportunity, ['VALOR BRUTO P', 'VALOR OPORTUNIDADE', 'VALOR EXTRA', 'VALOR FREELA', 'VALOR STAFF'])
             filtered_copy, count = component_plotDataframe(generalRevenueOportunity, "Abertura por Oportunidade")
             function_copy_dataframe_as_tsv(filtered_copy)
-            #function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas')
 
         with st.expander("📊 Abertura por Evento", expanded=False):
             generalRevenueEvents = general_revenue_events(day_ManegementBilling1, day_ManegementBilling2, filters)
             generalRevenueEvents = function_format_numeric_columns(generalRevenueEvents, ['VALOR BRUTO', 'VALOR LIQUIDO', 'CUSTO EXTRA', 'TAXA EVENTO'])
             filtered_copy, count = component_plotDataframe(generalRevenueEvents, "Abertura por Evento")
             function_copy_dataframe_as_tsv(filtered_copy)
-            #function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas')
 
         with st.expander("📊 Abertura por Brigada", expanded=False):
             generalRevenueBrigada = general_revenue_brigada(day_ManegementBilling1, day_ManegementBilling2, filters)
             generalRevenueBrigada = function_format_numeric_columns(generalRevenueBrigada, ['VALOR CONTRATO', 'PARCELA 1', 'PARCELA 2', 'PARCELA 3', 'PARCELA 4', 'PARCELA 5'])
             filtered_copy, count = component_plotDataframe(generalRevenueBrigada, "Abertura por Brigada")
             function_copy_dataframe_as_tsv(filtered_copy)
-            #function_box_lenDf(len_df=count, df=filtered_copy, y='-100', x='500', box_id='box1', item='Propostas')
 
 class ManegementBilling(Page):
     def render(self):
