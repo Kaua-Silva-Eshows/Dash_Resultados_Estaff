@@ -1,8 +1,10 @@
+import pandas as pd
 import streamlit as st
 from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid import GridUpdateMode
 from st_aggrid import StAggridTheme 
 from streamlit_echarts import st_echarts
+from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 
 
 def component_hide_sidebar():
@@ -39,16 +41,80 @@ def component_effect_underline():
     </style>
     """, unsafe_allow_html=True)
 
-def component_plotDataframe(df, name, height=400):
+def component_plotDataframe(df, name, height=400, num_columns=[], percent_columns=[]):
     st.markdown(f"<h5 style='text-align: center; background-color: #ffb131; padding: 0.1em;'>{name}</h5>", unsafe_allow_html=True)
 
     # Palavras-chave para procurar colunas que contenham links
     keywords = ['VER DETALHES', 'VER CANDIDATOS', 'DISPARAR WPP', 'PERFIL ARTISTA']
     columns_with_link = [col_name for col_name in df.columns if any(keyword in col_name.upper() for keyword in keywords)]
 
+     # Converter columns selecionadas para float com limpeza de texto
+    for col in num_columns:
+        if col in df.columns:
+            df[f"{col}_NUM"] = (
+                df[col]
+                .astype(str)
+                .str.upper()
+                .str.replace(r'[A-Z$R\s]', '', regex=True)
+                .str.replace('.', '', regex=False)
+                .str.replace(',', '.', regex=False)
+            )
+            df[f"{col}_NUM"] = pd.to_numeric(df[f"{col}_NUM"], errors='coerce')
+
+            # Agora formatar a coluna original como string BR
+            df[col] = df[f"{col}_NUM"].apply(
+                lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".") if pd.notnull(x) else ""
+            )
+
+    for col in percent_columns:
+        if col in df.columns:
+            df[f"{col}_NUM"] = (
+                df[col]
+                .astype(str)
+                .str.replace('%', '', regex=False)
+                .str.replace(',', '.', regex=False)
+                .str.replace('−', '-', regex=False)
+                .str.replace('–', '-', regex=False)
+                .str.replace(r'[^\d\.\-]', '', regex=True)
+            )
+            df[f"{col}_NUM"] = pd.to_numeric(df[f"{col}_NUM"], errors='coerce')
+
+            # Agora formatar a coluna original como string percentual
+            df[col] = df[f"{col}_NUM"].apply(
+                lambda x: f"{x:.2f}%".replace('.', ',') if pd.notnull(x) else ""
+            )
+
     # Configurar as opções do grid
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_default_column(filter=True)  # Habilitar filtro para todas as colunas
+    
+    cellstyle_code = JsCode("""
+function(params) {
+    const value = params.data[params.colDef.field + '_NUM'];
+    if (value === null || value === undefined || isNaN(value)) {
+        return {};
+    }
+    if (value < 0) {
+        return {
+            color: '#ff7b7b',
+            fontWeight: 'bold'
+        };
+    }
+    if (value > 0) {
+        return {
+            color: '#90ee90',
+            fontWeight: 'bold'
+        };
+    }
+    return {};
+}
+""")
+
+    # Aplicar estilo nas colunas numéricas (valor ou porcentagem)
+    for col in num_columns + percent_columns:
+        if col in df.columns and f"{col}_NUM" in df.columns:
+            gb.configure_column(col, cellStyle=cellstyle_code)
+            gb.configure_column(f"{col}_NUM", hide=True, type=["numericColumn"])
 
     # Configurar a seleção de linhas (opcional)
     gb.configure_selection(
@@ -84,12 +150,14 @@ def component_plotDataframe(df, name, height=400):
         enable_enterprise_modules=True,
         update_mode=GridUpdateMode.MODEL_CHANGED,
         fit_columns_on_grid_load=True,  # Ajusta as colunas automaticamente ao carregar
+        allow_unsafe_jscode=True,
         key=f"aggrid_{name}",
         theme=custom_theme,
         height=height
     )
 
     # Recupera o DataFrame filtrado
+    
     filtered_df = grid_response['data']
 
     return filtered_df, len(filtered_df)
