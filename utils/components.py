@@ -41,7 +41,7 @@ def component_effect_underline():
     </style>
     """, unsafe_allow_html=True)
 
-def component_plotDataframe(df, name, height=400, num_columns=[], percent_columns=[]):
+def component_plotDataframe(df, name,height=400, num_columns=[], percent_columns=[]):
     st.markdown(f"<h5 style='text-align: center; background-color: #ffb131; padding: 0.1em;'>{name}</h5>", unsafe_allow_html=True)
 
     # Palavras-chave para procurar colunas que contenham links
@@ -159,7 +159,7 @@ function(params) {
     # Recupera o DataFrame filtrado
     
     filtered_df = grid_response['data']
-
+    filtered_df = filtered_df.drop(columns=[col for col in filtered_df.columns if col.endswith('_NUM')], errors='ignore')
     return filtered_df, len(filtered_df)
 
 def component_plotPizzaChart(labels, sizes, name, max_columns=8):
