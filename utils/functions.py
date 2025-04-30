@@ -227,14 +227,16 @@ def function_callsigns_structure(df, df2, colunm, tile, text, num=False, type=''
     if type == 'sum':
         valuer1 = sum(df[f'{colunm}'])
         valuer2 = sum(df2[f'{colunm}'])
-    if type == 'average':
+    elif type == 'average':
         valuer1 = df[f'{colunm}'].mean()
         valuer2 = df2[f'{colunm}'].mean()
+    elif type == 'count':
+        valuer1 = df[f'{colunm}'].count()
+        valuer2 = df2[f'{colunm}'].count()
 
     percentage_difference, percentage_color, arrow = funtion_calculate_percentage(valuer1, valuer2)
-    if num == True:
+    if num:
         valuer1_formatted = f"{valuer1:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
         tile.write(f"<p style='text-align: center; font-size: 12px;'>{text}</br><span style='font-size: 17px;'>{valuer1_formatted}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
     else:
         tile.write(f"<p style='text-align: center; font-size: 12px;'>{text}</br><span style='font-size: 17px;'>{valuer1}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
- 

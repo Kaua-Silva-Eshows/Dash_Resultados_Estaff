@@ -19,6 +19,7 @@ def initialize_data(id):
         "ratingsRankDetailsBlueme" : pd.DataFrame(),
         "billingCompanies" : pd.DataFrame(),
         "worksByFunctions" : pd.DataFrame(),
+        "averageFreelaValueAndHourlyRate" : pd.DataFrame(),
         "id": id,
     }
 

@@ -9,7 +9,7 @@ from utils.components import *
 from utils.functions import *
 from datetime import date, datetime
 
-def BuildGeneralResults(billingCompanies, worksByFunctions, generalRevenueEvents, generalRevenueBrigada):
+def BuildGeneralResults(billingCompanies, worksByFunctions, generalRevenueEvents, generalRevenueBrigada, averageFreelaValueAndHourlyRate):
 
     row1 = st.columns(6)
     global day_GeneralResults1, day_GeneralResults2
@@ -31,9 +31,11 @@ def BuildGeneralResults(billingCompanies, worksByFunctions, generalRevenueEvents
     row2 = st.columns([2, 1.5])
     billingCompanies = billing_companies(day_GeneralResults1, day_GeneralResults2)
     worksByFunctions = works_by_functions(day_GeneralResults1, day_GeneralResults2)
-
+    averageFreelaValueAndHourlyRate = average_freela_value_and_hourly_rate(day_GeneralResults1, day_GeneralResults2)
+    
     billingCompanies2 = billing_companies(day_GeneralResults3, day_GeneralResults4)
     worksByFunctions2 = works_by_functions(day_GeneralResults3, day_GeneralResults4)
+    averageFreelaValueAndHourlyRate2 = average_freela_value_and_hourly_rate(day_GeneralResults3, day_GeneralResults4)
 
     with row2[0]:
             
@@ -42,16 +44,17 @@ def BuildGeneralResults(billingCompanies, worksByFunctions, generalRevenueEvents
         function_callsigns_structure(billingCompanies, billingCompanies2, 'NÚM. DE TRABALHOS', tile, 'Núm. Jobs', type='sum')
 
         tile = row2_1[1].container(border=True)
-        function_callsigns_structure(billingCompanies, billingCompanies2, 'FREELAS DISTINTOS', tile, 'Freelas Dist.', type='sum')
+        function_callsigns_structure(averageFreelaValueAndHourlyRate, averageFreelaValueAndHourlyRate2, 'FREELAS DISTINTOS', tile, 'Freelas Dist.', type='sum')
         
         tile = row2_1[2].container(border=True)
-        function_callsigns_structure(billingCompanies, billingCompanies2, 'FUNÇÕES DISTINTAS', tile, 'Funções Dist.', type='sum')
+        function_callsigns_structure(worksByFunctions, worksByFunctions2, 'FUNÇÃO', tile, 'Funções Dist.', type='count')
 
         tile = row2_1[3].container(border=True)
-        function_callsigns_structure(billingCompanies, billingCompanies2, 'VALOR LIQUIDO', tile, 'Valor Med./Jobs', num=True, type='average')
+
+        function_callsigns_structure(averageFreelaValueAndHourlyRate, averageFreelaValueAndHourlyRate2, 'VALOR MEDIO POR JOB', tile, 'Valor Med./Jobs', num=True, type='average')
 
         tile = row2_1[4].container(border=True)
-        function_callsigns_structure(worksByFunctions, worksByFunctions2, 'VALOR MÉDIO POR HORA', tile, 'Valor Med./Hora', num=True, type='average')
+        function_callsigns_structure(averageFreelaValueAndHourlyRate, averageFreelaValueAndHourlyRate2, 'VALOR MEDIO POR HORA', tile, 'Valor Med./Hora', num=True, type='average')
         
         row2_2 = st.columns(5)
         tile = row2_2[0].container(border=True)
@@ -105,8 +108,9 @@ class GeneralResults(Page):
         self.data['worksByFunctions'] = works_by_functions(day_GeneralResults1, day_GeneralResults2) 
         self.data['generalRevenueEvents'] = general_revenue_events(day_GeneralResults1, day_GeneralResults2, filters='')
         self.data['generalRevenueBrigada'] = general_revenue_brigada(day_GeneralResults1, day_GeneralResults2, filters='')
-        
+        self.data['averageFreelaValueAndHourlyRate'] = average_freela_value_and_hourly_rate(day_GeneralResults1, day_GeneralResults2)
         BuildGeneralResults(self.data['billingCompanies'], 
                             self.data['worksByFunctions'],
                             self.data['generalRevenueEvents'],
-                            self.data['generalRevenueBrigada'])
+                            self.data['generalRevenueBrigada'],
+                            self.data['averageFreelaValueAndHourlyRate'])
