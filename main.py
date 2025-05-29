@@ -1,6 +1,6 @@
-import base64
 import requests
 import streamlit as st
+from utils.jwt_utils import *
 from utils.user import *
 from utils.components import component_hide_sidebar
 
@@ -32,7 +32,7 @@ def authenticate(userName: str, userPassword: str):
 def main():
     initialize_session_state()
     if st.session_state['jwt_token']:
-        user_data = (st.session_state['jwt_token'])
+        user_data = decode_jwt(st.session_state['jwt_token'])
         if user_data:
             st.session_state['user_data'] = user_data
             st.session_state['loggedIn'] = True
@@ -47,35 +47,27 @@ def main():
         st.switch_page("pages/home.py")
 
 def show_login_page():
-    col1, col2 = st.columns([4,1])
-    col1.write("## DashBoard Escritorio FB")
-    with open("./assets/imgs/logo_FB.png", "rb") as img_file:
-        b64_image = base64.b64encode(img_file.read()).decode()
-    # Inserir imagem com altura customizada (ex: 100px)
-    col2.markdown(
-        f'<img src="data:image/png;base64,{b64_image}" style="height:100px;">',
-        unsafe_allow_html=True
-    )
-
+    col1, col2 = st.columns([4,2])
+    col1.write("## DashBoard Resultados Estaff")
+    col2.image("./assets/imgs/staff.png", width=200)
     userName = st.text_input(label="", value="", placeholder="login")
     userPassword = st.text_input(label="", value="", placeholder="Senha",type="password")
-    
     if st.button("login"):
         user_data = authenticate(userName, userPassword)
         if user_data:
-            st.session_state['jwt_token'] = (user_data)
+            st.session_state['jwt_token'] = encode_jwt(user_data)
             st.session_state['user_data'] = user_data
             st.session_state['loggedIn'] = True
             st.switch_page("pages/home.py")
-            st.experimental_rerun()
+            st.experimental_rerun() #Força o carreganeto da pagina
         else:
             st.error("Email ou senha inválidos!")
 
 if __name__ == "__main__":
     initialize_session_state()
     st.set_page_config(
-    page_title="login | Escritorio FB",
-    page_icon="./assets/imgs/logo_FB.png",
+    page_title="login | Resultados Estaff",
+    page_icon="./assets/imgs/staff-logo.png",
     layout="centered",
     )
 
