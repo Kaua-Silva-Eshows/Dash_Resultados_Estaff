@@ -1,10 +1,9 @@
 import mysql.connector
 import streamlit as st
 import pandas as pd
-from datetime import datetime
 
-def get_mysql_connection_estaff():
-    mysql_config = st.secrets["mysql_estaff"]
+def get_mysql_connection_eshows():
+    mysql_config = st.secrets["mysql_eshows"]
     # Create MySQL connection
     conn = mysql.connector.connect(
         host=mysql_config['host'],
@@ -15,20 +14,8 @@ def get_mysql_connection_estaff():
     )    
     return conn
 
-def get_mysql_connection_grupoe():
-    mysql_config = st.secrets["mysql_grupoe"]
-    # Create MySQL connection
-    conn = mysql.connector.connect(
-        host=mysql_config['host'],
-        port=mysql_config['port'],
-        database=mysql_config['database'],
-        user=mysql_config['username'],
-        password=mysql_config['password']
-    )    
-    return conn
-
-def get_mysql_connection_blueme():
-    mysql_config = st.secrets["mysql_blueme"]
+def get_mysql_connection_fabrica():
+    mysql_config = st.secrets["mysql_fabrica"]
     # Create MySQL connection
     conn = mysql.connector.connect(
         host=mysql_config['host'],
@@ -39,12 +26,10 @@ def get_mysql_connection_blueme():
     )    
     return conn
 
-
-def execute_query(query, use_grupoe=False, use_blueme=False):
+def execute_query(query, use_fabrica=False):
     conn = (
-    get_mysql_connection_grupoe() if use_grupoe 
-    else get_mysql_connection_blueme() if use_blueme 
-    else get_mysql_connection_estaff()
+    get_mysql_connection_fabrica() if use_fabrica 
+    else get_mysql_connection_eshows()
 )
 
     cursor = conn.cursor()
@@ -77,8 +62,8 @@ def execute_query(query, use_grupoe=False, use_blueme=False):
         cursor.close()
         conn.close()
 
-def get_dataframe_from_query(consulta, use_grupoe=False, use_blueme=False):
-    result, column_names = execute_query(consulta, use_grupoe, use_blueme)
+def get_dataframe_from_query(consulta, use_fabrica=False):
+    result, column_names = execute_query(consulta, use_fabrica)
     if result is None or column_names is None:
         return pd.DataFrame() 
     return pd.DataFrame(result, columns=column_names)
