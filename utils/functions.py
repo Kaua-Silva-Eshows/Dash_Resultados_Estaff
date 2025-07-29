@@ -11,29 +11,55 @@ def function_copy_dataframe_as_tsv(df):
     components.html(
         f"""
         <style>
-            .custom-button {{
-                background-color: #1e1e1e; /* Cor de fundo escura */
-                color: #ffffff; /* Cor do texto claro */
-                border: 1px solid #333333; /* Cor da borda escura */
-                padding: 10px 20px;
-                border-radius: 5px;
+            .custom-copy-btn {{
+                background: linear-gradient(90deg, #0a1172 0%, #1c3f95 100%);
+                color: #fff;
+                border: none;
+                padding: 12px 28px 12px 18px;
+                border-radius: 8px;
                 cursor: pointer;
                 font-size: 16px;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                display: inline-block;
-                text-align: center;
-                text-decoration: none;
-                transition: background-color 0.3s ease, color 0.3s ease;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                display: inline-flex;
+                align-items: center;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+                transition: background 0.3s, color 0.3s;
+                position: relative;
+                gap: 8px;
             }}
-            .custom-button:hover {{
-                background-color: #333333; /* Cor de fundo escura ao passar o mouse */
-                color: #e0e0e0; /* Cor do texto ao passar o mouse */
+            .custom-copy-btn:hover {{
+                background: linear-gradient(90deg, #1c3f95 0%, #0a1172 100%);
+                color: #222;
+            }}
+            .copy-icon {{
+                width: 20px;
+                height: 20px;
+                vertical-align: middle;
+                fill: currentColor;
             }}
         </style>
         <textarea id="clipboard-textarea" style="position: absolute; left: -10000px;">{df_tsv}</textarea>
-        <button class="custom-button" onclick="document.getElementById('clipboard-textarea').select(); document.execCommand('copy'); alert('DataFrame copiado para a área de transferência como TSV!');">Copiar DataFrame</button>
+        <button class="custom-copy-btn" id="copy-btn" onclick="copyDF()">
+            <svg class='copy-icon' viewBox='0 0 24 24'><path d='M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z'/></svg>
+            <span id="copy-btn-text">Copiar DataFrame</span>
+        </button>
+        <script>
+        function copyDF() {{
+            var textarea = document.getElementById('clipboard-textarea');
+            textarea.select();
+            document.execCommand('copy');
+            var btn = document.getElementById('copy-btn');
+            var btnText = document.getElementById('copy-btn-text');
+            btnText.innerText = 'Copiado!';
+            btn.style.background = 'linear-gradient(90deg, #4BB543 0%, #43e97b 100%)';
+            setTimeout(function() {{
+                btnText.innerText = 'Copiar DataFrame';
+                btn.style.background = 'linear-gradient(90deg, #0a1172 0%, #1c3f95 100%)';
+            }}, 1500);
+        }}
+        </script>
         """,
-        height=100
+        height=110
     )
 
 def function_merged_and_add_df(df1, df2, column):
