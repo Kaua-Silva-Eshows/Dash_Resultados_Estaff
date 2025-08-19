@@ -89,6 +89,7 @@ def function_grand_total_line(df):
     row['C7 Despesas com Softwares e Licenças'] = df['C7 Despesas com Softwares e Licenças'].sum()
     row['C8 Despesas com Marketing'] = df['C8 Despesas com Marketing'].sum()
     row['C9 Despesas Financeiras'] = df['C9 Despesas Financeiras'].sum()
+    row['C10 Investimentos'] = df['C10 Investimentos'].sum()
     row['Custos Totais'] = df['Custos Totais'].sum()
     df = pd.concat([df, row.to_frame().T], ignore_index=True)
 
@@ -100,8 +101,7 @@ def function_formated_cost(df, merged_df):
             if (merged_df['Faturamento Total'].eq(0)).any():
                 merged_df[f'{col[:2]}%'] = 0
             else:
-                merged_df[f'{col[:2]}%'] = (merged_df[col] / merged_df['Faturamento Total']) * 100
-
+                merged_df[f'{col.split()[0]}%'] = (merged_df[col] / merged_df['Faturamento Total']) * 100
     # Calcula o resultado total (faturamento - custo total)
     merged_df['Resultado Final'] = merged_df['Faturamento Total'] - merged_df['Custos Totais']
 
@@ -118,13 +118,13 @@ def function_formated_cost(df, merged_df):
     # Reorganiza as colunas
     cols_order = ['Mês/Ano', 'Faturamento Total','C1 Impostos', 'C1%', 'C2 Custos de Ocupação', 'C2%', 'C3 Despesas com Pessoal Interno', 'C3%', 
     'C4 Despesas com Pessoal Terceirizado', 'C4%', 'C5 Despesas Operacionais com Freelas', 'C5%', 'C6 Despesas com Clientes', 'C6%', 'C7 Despesas com Softwares e Licenças', 
-    'C7%', 'C8 Despesas com Marketing', 'C8%', 'C9 Despesas Financeiras', 'C9%', 'Custos Totais', 'Resultado Final', 'Res%']
+    'C7%', 'C8 Despesas com Marketing', 'C8%', 'C9 Despesas Financeiras', 'C9%', 'C10 Investimentos', 'C10%','Custos Totais', 'Resultado Final', 'Res%']
     merged_df = merged_df[cols_order]
 
     for col in merged_df.columns:
         if col in ['Faturamento Total','C1 Impostos','C2 Custos de Ocupação', 'C3 Despesas com Pessoal Interno', 
         'C4 Despesas com Pessoal Terceirizado', 'C5 Despesas Operacionais com Freelas', 'C6 Despesas com Clientes', 
-        'C7 Despesas com Softwares e Licenças', 'C8 Despesas com Marketing', 'C9 Despesas Financeiras', 'Custos Totais', 'Resultado Final']:
+        'C7 Despesas com Softwares e Licenças', 'C8 Despesas com Marketing', 'C9 Despesas Financeiras', 'C10 Investimentos', 'Custos Totais', 'Resultado Final']:
             merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
             merged_df[col] = merged_df[col].fillna(0)
             merged_df[col] = merged_df[col].apply(
@@ -204,17 +204,48 @@ def function_marged_pivot_costDetails(df1, df2):
         pivot_df = function_total_rows(pivot_df, 'c8_Despesas_com_Marketing')
     if (pivot_df['CATEGORIA DE CUSTO'] == 'c9_Despesas_Financeiras').any():
         pivot_df = function_total_rows(pivot_df, 'c9_Despesas_Financeiras')
+    if (pivot_df['CATEGORIA DE CUSTO'] == 'c10_Investimentos').any():
+        pivot_df = function_total_rows(pivot_df, 'c10_Investimentos')
 
+    new_rows = []
+
+    for cat, group in pivot_df.groupby('CATEGORIA DE CUSTO', sort=False):
+        new_rows.append(group)  # adiciona o grupo original
+        row = pd.Series()
+        for col in pivot_df.columns:
+            if col not in ['CATEGORIA DE CUSTO', 'CLASSIFICAÇÃO PRIMÁRIA']:
+                row[col] = group[col].sum()
+        row['CATEGORIA DE CUSTO'] = cat
+        row['CLASSIFICAÇÃO PRIMÁRIA'] = '📊 Total Categoria'
+        new_rows.append(pd.DataFrame([row]))  # adiciona subtotal após a categoria
+
+    pivot_df = pd.concat(new_rows, ignore_index=True)
+
+    # --- 🔑 Adiciona Custo Geral no final ---
     row = pd.Series()
     for col in pivot_df.columns:
-        if col != 'CATEGORIA DE CUSTO' and col != 'CLASSIFICAÇÃO PRIMÁRIA':  
-            row[col] = pivot_df.loc[~pivot_df['CLASSIFICAÇÃO PRIMÁRIA'].str.contains("📊 Total Categoria", na=False), col].sum()
-
+        if col not in ['CATEGORIA DE CUSTO', 'CLASSIFICAÇÃO PRIMÁRIA']:
+            row[col] = pivot_df.loc[
+                ~pivot_df['CLASSIFICAÇÃO PRIMÁRIA'].str.contains("📊 Total Categoria", na=False),
+                col
+            ].sum()
     row['CATEGORIA DE CUSTO'] = '💰 Custo Geral'
-    pivot_df = pd.concat([pivot_df, row.to_frame().T]).reset_index(drop=True)
+    row['CLASSIFICAÇÃO PRIMÁRIA'] = None
+    pivot_df = pd.concat([pivot_df, row.to_frame().T], ignore_index=True)
+
+    # --- 🔑 Ordenação correta das categorias ---
+    pivot_df['__ord__'] = pivot_df['CATEGORIA DE CUSTO'].str.extract(r'^c(\d+)_', expand=False).astype(float)
+    pivot_df['__ord__'] = pivot_df['__ord__'].fillna(1e9)
+    pivot_df = pivot_df.sort_values(['__ord__', 'CLASSIFICAÇÃO PRIMÁRIA'], kind="stable").drop(columns=['__ord__']).reset_index(drop=True)
+
+    # Total do período
     pivot_df['Total Do Periodo'] = pivot_df.drop(columns=['CATEGORIA DE CUSTO', 'CLASSIFICAÇÃO PRIMÁRIA']).sum(axis=1)
+
+    # Evita repetição do nome da categoria
     pivot_df['CATEGORIA DE CUSTO'] = pivot_df['CATEGORIA DE CUSTO'].where(
-    pivot_df['CATEGORIA DE CUSTO'].ne(pivot_df['CATEGORIA DE CUSTO'].shift())) 
+        pivot_df['CATEGORIA DE CUSTO'].ne(pivot_df['CATEGORIA DE CUSTO'].shift())
+    )
+
     pivot_df = function_format_numeric_columns(pivot_df)
 
     return pivot_df

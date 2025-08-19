@@ -24,11 +24,10 @@ def BuildCostManagement(generalRevenue, generalCosts, costDetails, ratingsRank, 
     generalCostsBlueme = general_costs_blueme(day_CostManagement1, day_CostManagement2)
 
     merged_df = pd.merge(generalCosts, generalRevenue[['Mês/Ano', 'Faturamento Total']], on='Mês/Ano', how='right')
-
     merged_df = function_merged_and_add_df(merged_df, generalCostsBlueme, column='Mês/Ano')
     merged_df = function_grand_total_line(merged_df)
     merged_df = function_formated_cost(generalCosts, merged_df)
-
+    
     filtered_copy, count = component_plotDataframe(merged_df, "Custos Gerais", num_columns=['Resultado Final'], percent_columns=['Res%'])
 
     function_copy_dataframe_as_tsv(filtered_copy)

@@ -17,6 +17,7 @@ SUM(CASE WHEN CES.ID_Categoria = 103 THEN CES.Valor END) AS 'C6 Despesas com Cli
 SUM(CASE WHEN CES.ID_Categoria = 108 THEN CES.Valor END) AS 'C7 Despesas com Softwares e Licenças',
 SUM(CASE WHEN CES.ID_Categoria = 107 THEN CES.Valor END) AS 'C8 Despesas com Marketing',
 SUM(CASE WHEN CES.ID_Categoria = 106 THEN CES.Valor END) AS 'C9 Despesas Financeiras',
+NULL AS 'C10 Investimentos',
 SUM(CASE WHEN CES.ID_Categoria IN (100, 104, 101, 105, 109, 103, 108, 107, 106) THEN CES.Valor END) AS 'Custos Totais'
 
 FROM View_Custos_Estaff_Consolidados CES
